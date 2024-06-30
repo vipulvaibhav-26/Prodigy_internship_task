@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 0fr);
+    gap:0;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    cursor: pointer;
+    
+}
+
+.cell:hover {
+    background-color: #f0f0f0;
+}
+
+.cell.x {
+    color: #ff69b4;
+}
+
+.cell.o {
+    color: #33cc33;
+}
+</style>
+<body>
+    <!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div class="game-board">
+        <div class="cell" id="cell-0"></div>
+        <div class="cell" id="cell-1"></div>
+        <div class="cell" id="cell-2"></div>
+        <div class="cell" id="cell-3"></div>
+        <div class="cell" id="cell-4"></div>
+        <div class="cell" id="cell-5"></div>
+        <div class="cell" id="cell-6"></div>
+        <div class="cell" id="cell-7"></div>
+        <div class="cell" id="cell-8"></div>
+    </div>
+    </div>
+    <script>
+        // script.js
+
+let gameBoard = [];
+let currentPlayer = "X";
+let gameOver = false;
+
+// Initialize game board
+for (let i = 0; i < 9; i++) {
+    gameBoard.push("");
+    document.getElementById(`cell-${i}`).addEventListener("click", handleCellClick);
+}
+
+function handleCellClick(event) {
+    if (gameOver) return;
+    const cellIndex = event.target.id.split("-")[1];
+    if (gameBoard[cellIndex] === "") {
+        gameBoard[cellIndex] = currentPlayer;
+        event.target.textContent = currentPlayer;
+        event.target.classList.add(currentPlayer.toLowerCase());
+        checkForWin();
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+    }
+}
+
+function checkForWin() {
+    const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+    for (let i = 0; i < winningCombinations.length; i++) {
+        const combination = winningCombinations[i];
+        if (gameBoard[combination[0]] === gameBoard[combination[1]] && gameBoard[combination[1]] === gameBoard[combination[2]] && gameBoard[combination[0]] !== "") {
+            gameOver = true;
+            alert(`Player ${gameBoard[combination[0]]} wins!`);
+            return;
+        }
+    }
+    if (!gameBoard.includes("")) {
+        gameOver = true;
+        alert("It's a draw!");
+    }
+}
+    </script>
+</body>
+</html>
+</body>
+</html>
