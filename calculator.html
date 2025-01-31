@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* Global styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 10px;
+}
+
+/* Calculator styles */
+.calculator {
+    max-width: 350px;
+    margin: auto auto;
+    padding: 20px;
+    background-color: #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(245, 255, 250,1);
+}
+
+.display {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    font-size: 40px;
+    text-align: right;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow:0 1px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    border: 0.1px solid black;
+}
+
+.keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.key {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    margin: 2px;
+    font-size: 30px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.key:hover {
+    background-color: #444;
+}
+
+.key:active {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.num {
+    background-color: #666;
+}
+
+#operator {
+    background-color: #999;
+}
+#reset {
+    background-color: rgb(167, 121, 121);
+    grid-column: 1/5;
+   text-align: center;
+   border-radius:90px;
+   height: 25px;
+   cursor:grab;
+}
+
+
+/* Responsive styles */
+@media only screen and (max-width: 600px) {
+    .calculator {
+        max-width: 250px;
+    }
+    .display {
+        font-size: 30px;
+    }
+    .key {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .calculator {
+        max-width: 200px;
+    }
+    .display {
+        font-size: 20px;
+    }
+    .key {
+        font-size: 15px;
+    }
+}
+</style>
+<body>
+    <div class="calculator">
+        <div class="display" id="screen"></div>
+        <div class="keys">
+            <div class="row">
+                <div class="key num">7</div>
+                <div class="key num">8</div>
+                <div class="key num">9</div>
+                <div id="operator" class="key num">+</div>
+            </div>
+            <div class="row">
+                <div class="key num">4</div>
+                <div class="key num">5</div>
+                <div class="key num">6</div>
+                <div id="operator" class="key num">-</div>
+            </div>
+            <div class="row">
+                <div class="key num">1</div>
+                <div class="key num">2</div>
+                <div class="key num">3</div>
+                <div id="operator" class="key num">*</div>
+            </div>
+            <div class="row">
+                <div class="key num">.</div>
+                <div class="key num">0</div>
+                <div id="operator" class="key num">=</div>
+                <div id="operator" class="key num">/</div>
+            </div>
+              <div id="reset" id="operator" class="num">C</div>
+          </div>
+        </div>
+    </div>
+
+    <script >// Get the screen element
+        let screen = document.getElementById("screen");
+        
+        // Get all the number elements
+        let numbers = document.querySelectorAll(".num");
+        
+        // Initialize variables to store the current number, previous number, and operator
+        let currentNumber = "";
+        let previousNumber = "";
+        let operator = "";
+        
+        // Add event listeners to each number element
+        numbers.forEach((number) => {
+          number.addEventListener("click", (e) => {
+            // Get the text content of the clicked number element
+            let num = e.target.textContent;
+             
+            // Check if the clicked element is the equals button
+            if (num === "=" ) {
+              // Call the calculate function
+              calculate();
+            } 
+            // Check if the clicked element is an operator
+            else if (num === "+" || num === "-" || num === "*" || num === "/" ) {
+              // Store the operator
+              operator = num;
+              // Store the current number as the previous number
+              previousNumber = currentNumber;
+              // Reset the current number
+              currentNumber = "";
+              // Update the screen with the previous number and operator
+              screen.textContent = previousNumber + " " + operator;
+            } 
+            //cancel button
+            else if (num==="C" ) {
+              // Store the operator
+              operator = num;
+              // Store the current number as the previous number
+              previousNumber = currentNumber;
+              // Reset the current number
+              currentNumber = "";
+              // Update the screen with the previous number and operator
+              screen.textContent = operator;
+            } 
+            // Check if the clicked element is the decimal point
+            else if (num === ".") {
+              // Check if the current number already contains a decimal point
+              if (!currentNumber.includes(".")) {
+                // Add the decimal point to the current number
+                currentNumber += num;
+                // Update the screen with the current number
+                screen.textContent = currentNumber;
+              }
+            } 
+            // If the clicked element is a number
+            else {
+              // Add the number to the current number
+              currentNumber += num;
+              // Update the screen with the current number
+              screen.textContent = currentNumber;
+            }
+          });
+        });
+        
+       // Define the calculate function
+function calculate() {
+  // Initialize a variable to store the result
+  let result = 0;
+  
+  // Perform the calculation based on the operator
+  if (operator === "+") {
+    // Add the previous number and current number
+    result = parseFloat(previousNumber) + parseFloat(currentNumber);
+  }else if (operator === "-") {
+    // Subtract the current number from the previous number
+    result = parseFloat(previousNumber) - parseFloat(currentNumber);
+  } else if (operator === "*") {
+    // Multiply the previous number and current number
+    result = parseFloat(previousNumber) * parseFloat(currentNumber);
+  } else if (operator === "/") {
+    // Divide the previous number by the current number
+    if (parseFloat(currentNumber) !== 0) {
+      result = parseFloat(previousNumber) / parseFloat(currentNumber);
+    } else {
+      result = "Error: Division by zero";
+    }
+  }
+  
+  // Update the screen with the result
+  screen.textContent = result;
+  
+  // Store the result as the current number
+  currentNumber = result;
+  
+  // Reset the previous number and operator
+  previousNumber = "";
+  operator = "";
+}
+</script>
+</body>
+</html>
